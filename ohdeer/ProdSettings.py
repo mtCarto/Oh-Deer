@@ -1,5 +1,5 @@
 """
-Django settings for csc497 project.
+Django settings for ohdeer project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -25,13 +25,11 @@ GDAL_LIBRARY_PATH = environ.get('GDAL_LIBRARY_PATH')
 SECRET_KEY = '&^lan!p2#@rx1@cg7$9fj-4*8@6p#2y2$icgntvwpb@a+6fv#p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-#DEBUG = True
-TEMPLATE_DEBUG = False
-#TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['deer-watch.herokuapp.com']
-#ALLOWED_HOSTS = ['*']
+DEBUG = False
+TEMPLATE_DEBUG = False
+
+ALLOWED_HOSTS = ['ohdeer.herokuapp.com']
 
 # Application definition
 
@@ -39,11 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-	'django.contrib.gis',    
-	'django.contrib.sessions',
+		'django.contrib.gis',    
+		'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',	
-	'deer'
+		'deermap'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,32 +54,27 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'csc497.urls'
+ROOT_URLCONF = 'ohdeer.urls'
 
 TEMPLATE_DIRS = (
 	#[os.path.join(BASE_DIR,'templates')]
 	'templates',
 )
 
-WSGI_APPLICATION = 'csc497.wsgi.application'
+WSGI_APPLICATION = 'ohdeer.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-   'default': {
+'default': {
   		'ENGINE': 'django.contrib.gis.db.backends.postgis',
     	'NAME': 'deermap',
 		'USER': 'morgan',
-		#local'NAME':	'deerdb',
-		#local'USER': 'watcher',
 		'PASSWORD': '',
 		'HOST': '',
-    }
-}
 
-DATABASES['default'] = dj_database_url.config()
+#DATABASES['default'] = dj_database_url.config()
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -103,7 +96,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
 		#os.path.join(BASE_DIR,'static'),
-	'deer/static/',					
+	'deermap/static/',					
 )
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

@@ -26,11 +26,10 @@ SECRET_KEY = '&^lan!p2#@rx1@cg7$9fj-4*8@6p#2y2$icgntvwpb@a+6fv#p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
-TEMPLATE_DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = False
 
-#ALLOWED_HOSTS = ['deer-watch.herokuapp.com']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ohdeer.herokuapp.com']
 
 # Application definition
 
@@ -68,15 +67,12 @@ WSGI_APPLICATION = 'ohdeer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-   'default': {
+'default': {
   		'ENGINE': 'django.contrib.gis.db.backends.postgis',
-    	'NAME':	'deerdb',
-			'USER': 'watcher',
-			'PASSWORD': 'oakbay',
-			'HOST': 'localhost',
-    }
-}
+    	'NAME': 'deermap',
+		'USER': 'morgan',
+		'PASSWORD': '',
+		'HOST': '',
 
 #DATABASES['default'] = dj_database_url.config()
 # Internationalization
