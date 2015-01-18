@@ -1,0 +1,1 @@
+web: gunicorn csc497.wsgi --log-file -
