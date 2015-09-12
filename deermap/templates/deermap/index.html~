@@ -1,0 +1,73 @@
+{% extends "deermap/base.html" %}
+
+{% block title %}Oh Deer!{% endblock %}
+{% load staticfiles crispy_forms_tags geojson_tags %}
+
+{% block headerCSS %}
+	<link href ='/static/deermap/css/index.css' rel='stylesheet' type='text/css'>
+	<link href ='/static/deermap/mapbox/mapbox.css' rel="stylesheet" media="screen">
+	<link href ='/static/deermap/leaflet-plugins/MarkerCluster/MarkerCluster.css' rel='stylesheet' type='text/css'>
+	<link href ='/static/deermap/leaflet-plugins/UserMarker/leaflet.usermarker.css' rel='stylesheet' type='text/css'>
+	<link href ='/static/deermap/leaflet-plugins/Draw/leaflet.draw.css' rel='stylesheet' type='text/css'>
+	<link href ='/static/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css'>	
+	<link href ='/static/bootstrap/css/bootstrap-datetimepicker.min.css' rel='stylesheet' type='text/css'>
+	<!-- look into leaflet usermarker for custom markers ---->	
+{% endblock %}
+
+{% block headerJS %}
+	<!-- Load mapbox js -->
+	<script src='/static/deermap/mapbox/mapbox.js'></script>
+	<script src='/static/deermap/leaflet-plugins/MarkerCluster/leaflet.markercluster.js'></script>
+	<script src='/static/deermap/leaflet-plugins/UserMarker/leaflet.usermarker.js'></script>
+	<script src='/static/deermap/leaflet-plugins/Draw/leaflet.draw.js'></script>
+	<!-- load icon definitions -->
+	<script src = '/static/deermap/deerjs/icons.js'></script>
+
+	<!-- Load JS !! change to ohdeer and mapbox -->
+	<script src = '/static/deermap/deerjs/map.js'></script>
+	
+	<script src = '/static/bootstrap/js/moment.min.js'></script>	
+	<script src = '/static/bootstrap/js/bootstrap.min.js'></script>	
+	<script src = '/static/bootstrap/js/bootstrap-datetimepicker.js'></script>		
+
+{% endblock %}
+	
+{% block body %}
+	{% include 'deermap/sighting_form.html' %}
+	
+	<div class="page-body">
+		<!-- mapbox map -->
+		<div id="map">
+			<!-- map legend  must create html file for it-->
+		</div>
+		<div id="form-popup">
+		</div>
+	</div>
+	
+	<script>
+		//initialize map
+		initialize(scrollZoom=true);
+		//addControls(mobile={% if request.mobile %}true{% else %}false{% endif %});
+		
+		//load sightings from database
+		var sightings = geojsonMarker({{ sightings|geojsonfeature:"animal_type,num_animal,sighting_date,additional"|safe }}, "sighting").addTo(sightingData).getLayers();
+
+		//set map extents and zoom
+		setView({% if zoom %} {{ lat }}, {{ lng }}, {{ zoom }} {% endif %});
+
+
+		$(document).ready(function() {
+			{% if sightingForm.errors %}
+			$(window).load(function() {
+				console.log("form error");
+				$('#sightingForm').modal('show');	
+			});
+			{% endif %}
+		
+		});
+
+	</script>
+
+	<!--- add new points to map---->
+	{% include 'deermap/addPoint.html' %}
+{% endblock %}

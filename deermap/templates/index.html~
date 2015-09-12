@@ -1,64 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset=utf-8 />
-	<title>Oh Deer!</title>
+{% extends "deermap/base.html" %}
 
-	<!-- Load mapbox style and js-->	
-	<script src='https://api.tile.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
-	<link href ='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
-	
-	<!-- Load Local styles !! datetime picker has bug must fix-->
+{% block title %}Oh Deer!{% endblock %}
+{% load staticfiles crispy_forms_tags geojson_tags %}
+
+{% block headerCSS %}
 	<link href ='/static/deermap/css/index.css' rel='stylesheet' type='text/css'>
-	<link href ='/static/bootstrap/css/bootstrap-theme.min.css' rel="stylesheet" media="screen">
-	<link href ='/static/bootstrap/css/bootstrap-datetimepicker.css' rel="stylesheet" media="screen">
-	
+	<link href ='/static/deermap/mapbox/mapbox.css' rel="stylesheet" media="screen">
+	<!-- look into leaflet usermarker for custom markers ---->	
+	<link href ='/static/deermap/leaflet-plugins/MarkerCluster.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block headerJS %}
+	<!-- Load mapbox js -->
+	<script src='/static/deermap/mapbox/mapbox.js'></script>
+	<script src='/static/deermap/leaflet-plugins/leaflet.markercluster.js'></script>
+	<!-- load icon definitions -->
+	<script src = '/static/deermap/deerjs/icons.js'></script>
 
 	<!-- Load JS !! change to ohdeer and mapbox -->
 	<script src = '/static/deermap/deerjs/map.js'></script>
 	
 	<script src = "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src = '/static/bootstrap/js/bootstrap.min.js'></script>	
-	<script src = '/static/bootstrap/js/bootstrap-datetimepicker.min.js'></script>	
+{% endblock %}
+	
+{% block body %}
+	{% include 'deermap/sighting_form.html' %}
+	
+	<div class="page-body">
+		<!-- mapbox map -->
+		<div id="map">
+			<!-- map legend  must create html file for it-->
+		</div>
+	</div>
+	
+	<script>
+		//initialize map
+		initialize(scrollZoom=true);
+		//addControls(mobile={% if request.mobile %}true{% else %}false{% endif %});
+		
+		//load sightings from database
+		var sightings = geojsonMarker({{ sightings|geojsonfeature:"animal_type,num_animal,sighting_date,additional"|safe }}, "sighting").addTo(sightingData).getLayers();
 
-	
-</head>
-<!-- call init() to create map--
-<body onload='init()'> -->
-<body>
-<nav class = "navbar navbar-default navbar-fixed-top" role="navigation">
-	<div class= "container-fluid">
-			<div class= "navbar-header">
-				<!-- logo here-->
-				<img id="logo" src="https://dl.dropboxusercontent.com/u/74028715/OhDeer/Logo.png">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle Navigation Bar</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="./">Deer test</a>
-			</div>
-	</div>
-</nav>
-	
-<!--- The map ---->
-<div id='map' class='map'></div>
-<script>
-	L.mapbox.accessToken = 'pk.eyJ1IjoibWN0aG9tcHMiLCJhIjoidGNJUUVsVSJ9.U6CffdhpOp3l1i2CWPp5ag';
-	var mapboxID = '{{ MAPBOX_ID }}';	
-	var map = L.mapbox.map('map', mapboxID).setView([40, -74.50], 9);
-</script>
-<!----- Add buttons to the map --
-<div style="z-index: 99;">
-	<div class="button" style="bottom: 80px;">
-		<button id="geolocate" onclick="getGeolocation()">Geolocate</button>
-	</div>
-	<div class="button">
-		<button id="newsighting" onclick="addSighting()">Add New Sighting</button>
-	</div>
-	<div id="popup"></div>
-</div>
---->
-</body>
-</html>
+		//set map extents and zoom
+		setView({% if zoom %} {{ lat }}, {{ lng }}, {{ zoom }} {% endif %});
+
+		//error messages may not need if statement since only one form
+		$(document).ready(function() {
+			{% if sightingForm.errors %}
+			$(window).load(function() {
+				$('#sightingForm').modal('show');
+			});
+			{% endif %}
+		
+		});
+	</script>
+
+	<!--- add new points to map 
+	{% include 'deermap/templates/addPoint.html' %} ---->
+{% endblock %}

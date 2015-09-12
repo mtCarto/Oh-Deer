@@ -1,0 +1,80 @@
+.page-body,#map{
+	height: 100%;
+}
+#map {
+	width: 100%;
+	height: 100%;
+ 	margin-top: 0px;
+	float: left;
+	z-index: 0;	
+}
+
+html, body {
+	height: 100%;
+	width: 100%;
+}
+body {
+	margin: 0px;
+	padding: 0px;
+	padding-top: 60px;
+	max-width: 100%;
+}
+
+.navbar-brand img{
+	float: left;
+	height: 45px;
+	margin-top: -10px;
+	margin-right: 5px;
+}
+
+.ui-button {
+	position: absolute;
+	background: #3887BE;
+	color: #FFF;
+	display: block;
+	bottom: 10%;
+	left: 10%;
+	width: 100px;
+	margin: -20px 0 0 -80px;
+	z-index: 100;
+	text-align: center;
+	padding: 10px;
+	border: 1px solid rgba(0,0,0,0.4);
+	border-radius: 3px;
+}
+.ui-button:hover {
+		background:#3074a4;
+		color:#fff;
+}
+
+.popover-content {
+	z-index: auto;	
+	min-width: 180px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+}
+
+#polygon-sprite{
+	width: 25px;
+	height: 25px;
+	display: inline-block;
+	background: url(/static/deermap/leaflet-plugins/Draw/images/spritesheet.png) -32px 3px;
+	margin-top: -9px;
+}
+
+.modal-dialog{
+	z-index: 4000;
+}
+.popup-details{
+	margin-left: 5px;
+	text-indent: -5px;
+}
+
+#sightingForm{
+	display: none;
+}
+#sighting_date{
+	display: none;
+}

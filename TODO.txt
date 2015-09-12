@@ -1,0 +1,10 @@
+Clean up static folder
+	-use cdn's instead of keeping libraries in static
+	
+FIXES:
+-Form submission error with point feature
+
+ADD:
+-Legend
+-Data Point Clustering
+-Tidy up Interface

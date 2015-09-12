@@ -1,5 +1,5 @@
 """
-Django settings for ohdeer project.
+Django settings for csc497 project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -26,10 +26,11 @@ SECRET_KEY = '&^lan!p2#@rx1@cg7$9fj-4*8@6p#2y2$icgntvwpb@a+6fv#p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = True
+TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['ohdeer.herokuapp.com']
+#ALLOWED_HOSTS = ['deer-watch.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -41,7 +42,11 @@ INSTALLED_APPS = (
 		'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',	
-		'deermap'
+
+		'deermap',
+		'djgeojson',
+		'leaflet',
+		'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,19 +66,41 @@ TEMPLATE_DIRS = (
 	'templates',
 )
 
+#maybe unnecessary? think i need it for views ie. indexContext
+TEMPLATE_CONTEXT_PROCESSORS = (
+	"django.contrib.auth.context_processors.auth",
+	"django.core.context_processors.debug",
+	"django.core.context_processors.i18n",
+	"django.core.context_processors.media",
+	"django.core.context_processors.static",
+	"django.core.context_processors.tz",
+	"django.core.context_processors.request",
+	"django.contrib.messages.context_processors.messages",
+)
+
 WSGI_APPLICATION = 'ohdeer.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-'default': {
+DATABASES = {
+   'default': {
   		'ENGINE': 'django.contrib.gis.db.backends.postgis',
-    	'NAME': 'deermap',
-		'USER': 'morgan',
-		'PASSWORD': '',
-		'HOST': '',
+    	'NAME':	'deerdb2',
+			'USER': 'postgres',
+			'PASSWORD': 'oakbay',
+			'HOST': 'localhost',
+    }
+}
 
+POSTGIS_VERSION = (2,0,3)
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+	
+SERIALIZATION_MODULES = {
+		'geojson': 'djgeojson.serializers'
+}
 #DATABASES['default'] = dj_database_url.config()
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

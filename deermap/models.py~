@@ -1,0 +1,38 @@
+from django.contrib.gis.db import models
+
+###### Response options for charfields
+
+ANIMAL_CHOICES = (
+	('Deer','Deer'),
+	('Raccoon','Raccoon'),
+	('Hare', 'Rabbit'),
+	('Rodent', 'Squirrel, Chipmunk, Rat')
+)
+
+class Sighting(models.Model):
+	objectid = models.IntegerField()
+	num_animal = models.IntegerField(
+		'How many did you see?',		
+	)
+	animal_type = models.CharField(
+		'What kind of animal did you see?',
+		max_length=50,
+		choices=ANIMAL_CHOICES
+	)
+	sighting_date = models.DateTimeField(
+		'Date of the sighting',
+	)
+	additional = models.CharField(
+		'Additional Information',	
+		max_length=254,
+		blank=True
+	)
+
+	geom = models.PointField(
+		'Location'
+	)
+	objects = models.GeoManager()
+
+	#return string representation of model
+	def __unicode__(self):
+		return self.animal_type

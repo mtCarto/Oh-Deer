@@ -1,0 +1,39 @@
+{% load crispy_forms_field %}
+<div id="div_{{ field.auto_id }}" class="form-group {% if form_show_errors and field.errors %}has-error{% endif %}">
+	{% if field.label %}
+		<label for="id_{{ field.id_for_label }}" class="control-label {% if field.field.required %}requiredField{% endif %}">
+			{{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+		</label>
+	{% endif %}
+
+	<div class="controls">
+		<div class="input-group date form_datetime" id="{{ field.auto_id }}" data-date-format='yyyy-mm-dd hh:ii' data-link-field="{{ field.auto_id }}" >
+		{% crispy_field field %}
+			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-calendar"></span>
+			</span>
+			<span class="add-on {% if active %}active{% endif %}">{{ crispy_appended_text|safe }}</span>
+		</div>
+	</div>
+	{% include 'bootstrap3/layout/help_text_and_errors.html' %}
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class='col-sm-6'>
+			<div class="form-group">
+				<div class='input-group date' id='datetimepicker1'>
+					<input type='text' class="form-control" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(function () {
+				$('#datetimepicker1').datetimepicker();
+			});
+		</script>
+	</div>
+</div>

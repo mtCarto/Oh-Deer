@@ -1,0 +1,90 @@
+<script>
+$(document).ready(function() {
+	{% if not request.mobile %}
+		desktopDrawing();
+	{% else %}
+		mobileDrawing();
+	{% endif %}
+});
+
+function desktopDrawing() {
+	/* tooltips */
+	L.drawLocal.draw.toolbar.buttons.marker = 'Add a new sighting.';
+	L.drawLocal.draw.handlers.marker.tooltip.start = 'Place where the wildlife sighting occurred.';
+	
+	{% with DISABLE_GEOFENCES=False %}
+	/* add control to map */
+	{% if not request.mobile %}
+	map.addControl(new L.Control.Draw({
+		draw: {
+			polyline: false,
+			rectangle: false,
+			circle: false,
+			marker: {
+				icon: pawIcon
+			},
+			polygon: false
+		}
+	}));
+	{% endif %}
+	{% endwith %}
+
+	//Point editting for admins
+	{% if request.user.is_administrator %}
+	L.drawLocal.edit.handlers.remove.tooltip.text = 'Click the point to remove';
+	L.drawLocal.edit.toolbar.buttons.removeDisabled = 'Nothing to delete.';
+
+	map.addControl(new L.Control.Draw({
+		position: 'bottomleft',
+		draw: false,
+		edit: {
+			edit:false,
+			featureGroup: sightingData
+		}
+	}));
+
+	{% endif %}
+
+	$(document).ready(function() { 
+		map.on('draw:created', function(e) {
+			var type = e.layerType,
+					layer = e.layer;
+		
+			if (type === 'marker') {
+				$('#sightingForm').modal('show');
+				var geom = JSON.stringify(layer.toGeoJSON().geometry);
+				console.log(geom);
+
+				document.getElementById("point").value = geom;
+			}
+		});
+	});
+};
+
+function mobileDrawing(){
+	$(document).ready(function() {
+		$('#map').animate({marginTop: "+=23"});
+		$('.tip-msg').hide().animate({height: 'show'});
+
+		$('.tip-msg .close').click(function(){
+			$('#map').animate({marginTop: "-=23"});
+			$('.tip-msg').animate({height:'hide'});
+			});
+	});
+
+	//double tap to add points
+	map.on('dblclick', function(e){
+		console.log("DOUBLE CLICK");
+		var geom = '{"type":"Point","coordinates":['+e.latlng.lng+','+e.latlng.lat+']}';
+		$('#sightingForm').modal('show');
+		document.getElementById("point").value = geom;
+	});
+}
+</script>
+
+{% if request.mobile %}
+<div class="tip-msg alert-info alert-dismissable">
+	<div class="close">&times;</div>
+	<center>Double tap a location to submit a sighting</center>
+</div>
+{% endif %}

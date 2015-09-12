@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset=utf-8 />
+	<title>Oh Deer!</title>
+
+	<!-- Load mapbox style and js -->
+	<script src='/static/deermap/mapbox/mapbox.js'></script>
+	<link href ='/static/deermap/mapbox/mapbox.css' rel="stylesheet" media="screen">	
+	<!-- Load Local styles  -->
+	<link href ='/static/deermap/css/index.css' rel='stylesheet' type='text/css'>
+	<link href ='/static/bootstrap/css/bootstrap-theme.min.css' rel="stylesheet" media="screen">
+	<link href ='/static/bootstrap/css/bootstrap-datetimepicker.css' rel="stylesheet" media="screen">
+	<!-- load icon definitions -->
+	<script src = '/static/deermap/deerjs/icons.js'></script>
+
+	<!-- Load JS !! change to ohdeer and mapbox -->
+	<script src = '/static/deermap/deerjs/map.js'></script>
+	
+	<script src = "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src = '/static/bootstrap/js/bootstrap.min.js'></script>	
+
+
+	
+</head>
+<!-- call init() to create map-->
+<body onload='init()'> 
+<nav class = "navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class= "container-fluid">
+			<div class= "navbar-header">
+				<!-- logo here-->
+				<img id="logo" src="https://dl.dropboxusercontent.com/u/74028715/OhDeer/Logo.png">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle Navigation Bar</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="./">Deer test</a>
+			</div>
+	</div>
+</nav>
+	
+<!--- The map ---->
+<div id='map' class='map'></div>
+<script type="text/javascript">
+	var map;
+	function init() {
+		//var accessToken = '{{ MAPBOX_ACCESS }}';
+		L.mapbox.accessToken =  'pk.eyJ1IjoibWN0aG9tcHMiLCJhIjoidGNJUUVsVSJ9.U6CffdhpOp3l1i2CWPp5ag';
+		//var mapboxID = '{{ MAPBOX_ID }}';	
+		var map = L.mapbox.map('map',  'mcthomps.km948apc').setView([48.4222, -123.3657], 12);
+		var layer = L.geoJson();
+	
+		//var featureLayer = L.mapbox.featureLayer()
+		$.getJSON("{% url 'data' %}", function (data) {
+			layer.on('ready', function(layer) {
+				this.eachLayer(function(marker) {
+					if (marker.toGeoJSON().properties.animal_type === 'deer') {
+						marker.setIcon(getIcon("deer"));
+					} else {
+						marker.setIcon(L.mapbox.marker.icon({}));
+					}
+				});
+			})
+			.addData(data);
+		});
+		map.addLayer(layer);
+	}
+</script>
+<!----- Add buttons to the map -->
+<div style="z-index: 99;">
+	<div class="button" style="bottom: 80px;">
+		<button id="geolocate" onclick="getGeolocation()">Geolocate</button>
+	</div>
+	<div class="button">
+		<button id="newsighting" onclick="addSighting()">Add New Sighting</button>
+	</div>
+	<div id="popup"></div>
+</div>
+
+</body>
+</html>

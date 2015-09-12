@@ -42,7 +42,7 @@ INSTALLED_APPS = (
 		'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',	
-		'deer'
+		'deermap'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,14 +55,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'csc497.urls'
+ROOT_URLCONF = 'ohdeer.urls'
 
 TEMPLATE_DIRS = (
 	#[os.path.join(BASE_DIR,'templates')]
 	'templates',
 )
 
-WSGI_APPLICATION = 'csc497.wsgi.application'
+WSGI_APPLICATION = 'ohdeer.wsgi.application'
 
 
 # Database
@@ -100,7 +100,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
 		#os.path.join(BASE_DIR,'static'),
-	'deer/static/',					
+	'deermap/static/',					
 )
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

@@ -4,28 +4,27 @@
 	<meta charset=utf-8 />
 	<title>Oh Deer!</title>
 
-	<!-- Load mapbox style and js-->	
-	<script src='https://api.tile.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
-	<link href ='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
-	
-	<!-- Load Local styles !! datetime picker has bug must fix-->
+	<!-- Load mapbox style and js -->
+	<script src='/static/deermap/mapbox/mapbox.js'></script>
+	<link href ='/static/deermap/mapbox/mapbox.css' rel="stylesheet" media="screen">	
+	<!-- Load Local styles  -->
 	<link href ='/static/deermap/css/index.css' rel='stylesheet' type='text/css'>
 	<link href ='/static/bootstrap/css/bootstrap-theme.min.css' rel="stylesheet" media="screen">
 	<link href ='/static/bootstrap/css/bootstrap-datetimepicker.css' rel="stylesheet" media="screen">
-	
+	<!-- load icon definitions -->
+	<script src = '/static/deermap/deerjs/icons.js'></script>
 
-	<!-- Load JS !! change to ohdeer and mapbox -->
+	<!-- Load JS -->
 	<script src = '/static/deermap/deerjs/map.js'></script>
 	
 	<script src = "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src = '/static/bootstrap/js/bootstrap.min.js'></script>	
-	<script src = '/static/bootstrap/js/bootstrap-datetimepicker.min.js'></script>	
+
 
 	
 </head>
-<!-- call init() to create map--
-<body onload='init()'> -->
-<body>
+<!-- call init() to create map-->
+<body onload='init()'> 
 <nav class = "navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class= "container-fluid">
 			<div class= "navbar-header">
@@ -44,13 +43,32 @@
 	
 <!--- The map ---->
 <div id='map' class='map'></div>
-<script>
-	var accessToken = '{{ MAPBOX_ACCESS }}';
-	L.mapbox.accessToken = accessToken;
-	var mapboxID = '{{ MAPBOX_ID }}';	
-	var map = L.mapbox.map('map', mapboxID).setView([40, -74.50], 9);
+<script type="text/javascript">
+	var map;
+	function init() {
+		//var accessToken = '{{ MAPBOX_ACCESS }}';
+		L.mapbox.accessToken =  'pk.eyJ1IjoibWN0aG9tcHMiLCJhIjoidGNJUUVsVSJ9.U6CffdhpOp3l1i2CWPp5ag';
+		//var mapboxID = '{{ MAPBOX_ID }}';	
+		var map = L.mapbox.map('map',  'mcthomps.km948apc').setView([48.4222, -123.3657], 12);
+		var layer = L.geoJson();
+	
+		//var featureLayer = L.mapbox.featureLayer()
+		$.getJSON("{% url 'data' %}", function (data) {
+			layer.on('ready', function(layer) {
+				this.eachLayer(function(marker) {
+					if (marker.toGeoJSON().properties.animal_type === 'deer') {
+						marker.setIcon(getIcon("deer"));
+					} else {
+						marker.setIcon(L.mapbox.marker.icon({}));
+					}
+				});
+			})
+			.addData(data);
+		});
+		map.addLayer(layer);
+	}
 </script>
-<!----- Add buttons to the map --
+<!----- Add buttons to the map -->
 <div style="z-index: 99;">
 	<div class="button" style="bottom: 80px;">
 		<button id="geolocate" onclick="getGeolocation()">Geolocate</button>
@@ -60,6 +78,6 @@
 	</div>
 	<div id="popup"></div>
 </div>
---->
+
 </body>
 </html>

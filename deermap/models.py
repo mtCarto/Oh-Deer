@@ -1,26 +1,38 @@
 from django.contrib.gis.db import models
 
+###### Response options for charfields
+
 ANIMAL_CHOICES = (
-	('DEER','Deer'),
-	('RACC','Raccoon'),
-	('RAB','Rabbit'),
-	('SCAT','Scat')
+	('Deer','Deer'),
+	('Raccoon','Raccoon'),
+	('Hare', 'Rabbit'),
+	('Rodent', 'Squirrel, Chipmunk, Rat')
 )
 
-# Create your models here.
-#create separate model for each animal type?
-class Animal(models.Model):
-	
-	animal_type = models.CharField(max_length=12,choices=ANIMAL_CHOICES)
-	num_animal = models.SmallIntegerField(default=1)
-	submission_date = models.DateTimeField(auto_now_add=True)
-	sighting_date = models.DateTimeField()
-	additional_info = models.TextField(null=True,blank=True,max_length=300)
+class Sighting(models.Model):
+	objectid = models.IntegerField()
+	num_animal = models.IntegerField(
+		'How many did you see?',		
+	)
+	animal_type = models.CharField(
+		'What kind of animal did you see?',
+		max_length=50,
+		choices=ANIMAL_CHOICES
+	)
+	sighting_date = models.DateTimeField(
+		'Date of the sighting',
+	)
+	additional = models.CharField(
+		'Additional Information',	
+		max_length=254,
+		blank=True
+	)
 
-	#geodjango fields
-	points = models.PointField()
+	geom = models.MultiPointField(
+		'Location'
+	)
 	objects = models.GeoManager()
 
 	#return string representation of model
 	def __unicode__(self):
-		return self.animal_type# Create your models here.
+		return self.animal_type

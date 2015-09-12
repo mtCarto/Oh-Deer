@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- tags used to set alerts for users, unnecessary for current implementation---->
+	{% load staticfiles %}
+	<title>{% block title %}{% endblock %}</title>
+	<meta name="description" content="Map your urban wildlife sighting locations."/>
+	<meta name="viewport" content="width-device-width, initial-scale=1, user-scalable=no">
+	
+	<!--- allow fullscreen on iOS and Chrome -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+
+	<!--- load CSS -->
+	{% block headerCSS %}{% endblock %}
+	<link href ="{% static 'bootstrap/css/bootstrap-theme.min.css' %}" rel="stylesheet" media="screen">
+	<!--- add a common CSS file for navbar css and geocoder<link href ="{% static 'deermap/css/index.css' %}" rel='stylesheet' type='text/css'> --->
+	
+	<!--- load js --->
+	<script src = "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	{% block headerJS %}{% endblock %}
+	<script src = "{% static 'bootstrap/js/bootstrap.min.js' %}" type='text/javascript'></script>	
+
+
+</head>
+
+<body>
+	{% include 'deermap/navbar.html' %}
+
+	<div id="message">
+		{% if messages %}
+			{% for message in messages %}
+			<div id="data-post-alert" class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<center>{{ message | safe }}</center>
+			</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+
+	{% block body %}{% endblock %}
+
+	<!-- fade out messages -->
+	<script>
+		$(window).load(function() {
+			setTimeout(function() { $('#data-post-alert').fadeOut() }, 7000);
+		});
+		//prevent multiple form submission
+		$(document).ready(function() {
+			$('input[type=submit]').click(function() {
+				$(this).prop("disabled", true);
+				$(this).closest("form").trigger('submit');
+			});
+		});
+	</script>
+</body>
+
+</html>

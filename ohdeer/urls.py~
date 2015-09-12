@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 #from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
-    url(r'', include('ohdeer.urls')),
+    url(r'^', include('deermap.urls', namespace="mapapp")),
     #url(r'^admin/', include(admin.site.urls)),
 	#url(r'^index/', TemplateView.as_view(template_name='index.html')),
 )
