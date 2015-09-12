@@ -9,10 +9,11 @@ Dependancies
 
 Database setup
 
-The development settings require a Postgres database called "sightings" accessible by user "postgres" that is not password protected. Be sure to add the postGIS extension. From the terminal, run:
+The development settings require a setting up a Postgres database accessible by user "postgres". Be sure to add the postGIS extension. 
 
-createdb -U postgres bikeDB
-psql -U postgres -d bikeDB -c "CREATE EXTENSON postgis;"
+From the terminal, run:
+createdb -U postgres Your_DB
+psql -U postgres -d Your_DB -c "CREATE EXTENSON postgis;"
 
 Syncing the tables from the Django app requires running
 
