@@ -22,7 +22,7 @@ GDAL_LIBRARY_PATH = environ.get('GDAL_LIBRARY_PATH')
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&^lan!p2#@rx1@cg7$9fj-4*8@6p#2y2$icgntvwpb@a+6fv#p'
+SECRET_KEY = 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
